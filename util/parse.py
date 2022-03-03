@@ -44,7 +44,7 @@ def parse_imported(text):
 
             if date != None:
                 if len(answers) != len(questions):
-                    print('improper number of questions and answers!')
+                    print('improper number of questions and answers for ' + date.isoformat())
                 classes.append({'date': date, 'qa': list(zip(questions, answers))})
 
             if line[-1] == ':':

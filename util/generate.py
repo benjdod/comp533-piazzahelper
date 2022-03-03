@@ -21,27 +21,6 @@ def write_days(days):
     for day in days:
         write_day(day[0], day[1])
 
-def write_today():
-    classes_dir = get_config_field('classesDirectory')
-    daily_file = get_config_field('dailyFile')    
-
-    with open(daily_file, 'r') as file:
-        linetype = 'q'
-        day_filename = make_day_filename(datetime.date.today())
-        with open('{classes_dir}/{fname}'.format(classes_dir=classes_dir, fname=day_filename), 'w') as destfile:
-            for line in file:
-                line = line.strip()
-                if line == '':
-                    continue
-                line = remove_qa_stubs(line)
-
-                if linetype == 'q':
-                    destfile.write(line + '\n')
-                    linetype = 'a'
-                else:
-                    destfile.write(line + '\n\n')
-                    linetype = 'q'
-
 def generate_diary():
     
     out = ''

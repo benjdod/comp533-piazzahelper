@@ -17,15 +17,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from util.generate import write_day, generate_diary, write_today
+from util.generate import write_day, generate_diary
 from util.parse import parse_imported
 
 # config fields (change these as you see fit, I'm just too lazy to parse them as cmdline args)
 
 LOG_LEVEL = logging.INFO
 HEADLESS = True
-
-
 class Operation(Enum):
     NOOP = 0
     IMPORT = 1
@@ -242,15 +240,9 @@ backup_path = store_backup(startingText)
 logger.info('stored diary backup as {fname}'.format(fname=backup_path))
 
 if operation == Operation.BACKUP:
+    driver.find_element(By.XPATH, "//a[@data-pats='cancel_button']").click()
     driver_close()
     logger.info('complete')
-
-def do_todays_write():
-    global logger
-    if prompt_yesno('Would you like to (re)generate today\'s diary entry?'):
-        write_today()
-        logger.info('wrote today\'s class file')
-
 
 if operation == Operation.IMPORT or operation == Operation.ALL:
     classes = parse_imported(startingText)
@@ -265,12 +257,10 @@ if operation == Operation.IMPORT or operation == Operation.ALL:
         write_day(c['date'], c['qa'])
 
     logger.info('wrote all class files. Please check them to ensure they were parsed correctly and fix any errors')
-    do_todays_write()
     with open('./test.yml', 'w') as yaml_file:
         yaml.dump(formed_classes, yaml_file, sort_keys=False)
 
 elif operation == Operation.COMMIT or operation == Operation.ALL:
-    do_todays_write()
     logger.info('generating diary text')
     diary_text = generate_diary()
     driver_textarea.clear()
