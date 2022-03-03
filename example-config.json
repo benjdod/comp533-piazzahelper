@@ -1,0 +1,11 @@
+{
+    "dailyFile": "./today.txt",
+    "backupDirectory": "./backup",
+    "maxBackups": 50,
+    "classesDirectory": "./classes",
+    "driverPath": "path\\to\\chromedriver\\executable",
+    "name": "your name",
+    "onyen": "your onyen",
+    "username": "your email",
+    "diaryLink": "https://linktoyourpiazzadiary.com"
+}

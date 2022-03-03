@@ -1,0 +1,11 @@
+{
+    "dailyFile": "./today.txt",
+    "backupDirectory": "./backup",
+    "maxBackups": 50,
+    "classesDirectory": "./classes",
+    "driverPath": "C:\\Users\\benjd\\Downloads\\chromedriver_win32\\chromedriver.exe",
+    "name": "Benjamin Dod",
+    "onyen": "benjdod",
+    "username": "benjdod@live.unc.edu",
+    "diaryLink": "https://piazza.com/class/kxx594eo8fl3y2?cid=78"
+}
