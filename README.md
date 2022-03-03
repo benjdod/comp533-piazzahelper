@@ -22,7 +22,7 @@ This is a helper script that attempts to automate creating and updating your Pia
 
 ## How It Works
 
-The script imports your diary and splits it into a series of files for each class day. Each file is a text file where each pair of lines represents a question-answer pair, like the following:
+The script imports your diary, saves it to backup location, and splits it into a series of files for each class day. Each file is a text file where each pair of lines represents a question-answer pair, like the following:
 
 ```
 What is the meaning of life, the universe and everything?
@@ -36,7 +36,7 @@ No I have no idea
 
 So when you do `import`, the script parses your diary and splits it out into these files by day. And when you `commit` to your diary, the script uses these files to write the QA pairs with proper formatting and stuff. 
 
-
+> Note: one way to ensure better data safety is to store your class and backup files in a seperate repository and keep remote repositories as you see fit. 
 ## Some Notes
 
  - ℹ️ this driver has only been tested on Google Chrome. It can be modified to use a different browser pretty easily but results may vary.
