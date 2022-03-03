@@ -29,7 +29,16 @@ class Operation(Enum):
     IMPORT = 1
     BACKUP = 2
     COMMIT = 3
-    ALL = 4
+    MAKE_TODAY = 4
+    ALL = 5
+
+argpairs = [
+    ('maketoday', Operation.MAKE_TODAY),
+    ('import', Operation.IMPORT),
+    ('backup', Operation.BACKUP),
+    ('commit', Operation.COMMIT),
+    ('all', Operation.ALL),
+]
 
 logger = logging.getLogger('piazza-helper')
 console_handler = logging.StreamHandler(sys.stdout)
@@ -110,7 +119,10 @@ def store_backup(text):
     return fname
 
 def print_usage():
-    print('COMP 533 Piazza Helper')
+    print('COMP 533 Piazza Helper Usage:')
+    print('-----------------')
+    print('maketoday - create a new file for today\'s class if it doesn\'t exist')
+    print('-----------------')
     print('backup - backs up the current contents of your diary to disk')
     print('import - imports the contents of your diary to individual class files on disk')
     print('commit - writes all class files to your diary')
@@ -121,14 +133,10 @@ def parse_cmdline_args():
     if argc < 2:
         print_usage()
         return Operation.NOOP
-    elif sys.argv[1] == 'backup':
-        return Operation.BACKUP
-    elif sys.argv[1] == 'commit':
-        return Operation.COMMIT
-    elif sys.argv[1] == 'import':
-        return Operation.IMPORT
-    elif sys.argv[1] == 'all':
-        return Operation.ALL
+
+    for argp in argpairs:
+        if sys.argv[1] == argp[0]:
+            return argp[1]
     print_usage()
     return Operation.NOOP
 
@@ -142,6 +150,21 @@ diarylink = get_config_field('diaryLink')
 operation = parse_cmdline_args()
 
 if operation == Operation.NOOP:
+    sys.exit()
+
+if operation == Operation.MAKE_TODAY:
+    today = date.today()
+    fname = get_config_field('classesDirectory')
+    if fname[-1] != '/':
+        fname += '/'
+    classdate = '{month}-{day}'.format(month=str(today.month), day=str(today.day))
+    fname += classdate + '.txt'
+    if os.path.exists(fname):
+        print('File for today\'s class exists at ' + fname)
+    else:
+        new_file = open(fname, 'a+')
+        print('Created new file for today\'s class at ' + fname)
+        
     sys.exit()
 
 logger.info("initializing chrome web driver")
@@ -257,8 +280,6 @@ if operation == Operation.IMPORT or operation == Operation.ALL:
         write_day(c['date'], c['qa'])
 
     logger.info('wrote all class files. Please check them to ensure they were parsed correctly and fix any errors')
-    with open('./test.yml', 'w') as yaml_file:
-        yaml.dump(formed_classes, yaml_file, sort_keys=False)
 
 elif operation == Operation.COMMIT or operation == Operation.ALL:
     logger.info('generating diary text')
@@ -270,6 +291,7 @@ elif operation == Operation.COMMIT or operation == Operation.ALL:
         driver_textarea.send_keys(Keys.ENTER)
         driver_textarea.send_keys(Keys.ENTER)
     driver.find_element(By.XPATH, "//a[@data-pats='submit_button']").click()
+    print('diary written - visit ' + get_config_field('diaryLink') + ' to ensure it was written correctly')
 
     logger.info("complete")
     driver_close()
