@@ -2,13 +2,6 @@
 
 This is a helper script that attempts to automate creating and updating your Piazza diary for COMP 533 with Selenium. 
 
-## Some Notes
-
- - ℹ️ this driver has only been tested on Google Chrome. It can be modified to use a different browser pretty easily but results may vary.
-
- - ⚠️ make a backup of your diary before using this script. Although it has been tested and worked on, I can make no guarantees for your data's safety, so better safe than sorry!
-
-
 ## Getting Started
 
 #### Your First Time
@@ -42,3 +35,11 @@ No I have no idea
 ```
 
 So when you do `import`, the script parses your diary and splits it out into these files by day. And when you `commit` to your diary, the script uses these files to write the QA pairs with proper formatting and stuff. 
+
+
+## Some Notes
+
+ - ℹ️ this driver has only been tested on Google Chrome. It can be modified to use a different browser pretty easily but results may vary.
+
+ - ⚠️ make a backup of your diary before using this script. Although it has been tested and worked on, I can make no guarantees for your data's safety, so better safe than sorry!
+
