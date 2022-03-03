@@ -1,10 +1,8 @@
 import html
-from lib2to3.pgen2.token import OP
 import logging
 import sys
 import os
 import signal
-import yaml
 from datetime import date
 from enum import Enum
 from turtle import st
