@@ -124,7 +124,7 @@ def print_usage():
     print('backup - backs up the current contents of your diary to disk')
     print('import - imports the contents of your diary to individual class files on disk')
     print('commit - writes all class files to your diary')
-    print('all    - performs the above operations in sequence')
+    print('all    - performs the above operations in sequence (rewrites all local files)')
 
 def parse_cmdline_args():
     argc = len(sys.argv)
