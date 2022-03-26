@@ -29,7 +29,10 @@ def generate_diary():
     out += '{onyen}, {name}, Diary'.format(onyen=get_config_field('onyen'), name=get_config_field('name'))
     out += NEWLINE
 
-    for item in os.listdir('classes'):
+    class_files = os.listdir(get_config_field('classesDirectory'))
+    class_files.sort(key=lambda s: list(map(int, re.sub(r'\.txt$', '', s).split('-'))))
+
+    for item in class_files:
         fullpath = os.path.join(os.path.abspath('classes'), item)
         if not os.path.isfile(fullpath):
             continue
