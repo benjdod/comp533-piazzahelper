@@ -33,7 +33,7 @@ def generate_diary():
     class_files.sort(key=lambda s: list(map(int, re.sub(r'\.txt$', '', s).split('-'))))
 
     for item in class_files:
-        fullpath = os.path.join(os.path.abspath('classes'), item)
+        fullpath = os.path.join(os.path.abspath(get_config_field('classesDirectory')), item)
         if not os.path.isfile(fullpath):
             continue
         datestr = re.sub(r'\.txt$', '', item)
