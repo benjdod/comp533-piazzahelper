@@ -38,11 +38,22 @@ argpairs = [
     ('all', Operation.ALL),
 ]
 
+# create logger
+
 logger = logging.getLogger('piazza-helper')
+logger.setLevel(LOG_LEVEL)
+
 console_handler = logging.StreamHandler(sys.stdout)
 console_handler.setFormatter(logging.Formatter('%(message)s'))
 logger.addHandler(console_handler)
-logger.setLevel(LOG_LEVEL)
+
+if get_config_field('logFile') != None:
+    file_handler = logging.FileHandler(get_config_field('logFile'))
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+    logger.addHandler(file_handler)
+
+
+# prompt convenience functions
 
 def prompt_username():
     print("username: ")
@@ -189,6 +200,7 @@ for signum in [
 piazza_home_url = "https://piazza.com"
 logger.info("navigating to " + piazza_home_url)
 driver.get(piazza_home_url)
+
 driver.maximize_window()
 
 def try_login():

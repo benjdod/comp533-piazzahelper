@@ -1,6 +1,7 @@
 {
     "dailyFile": "./today.txt",
     "backupDirectory": "./backup",
+    "logFile": "./helper.log",
     "maxBackups": 50,
     "classesDirectory": "./classes",
     "driverPath": "C:\\Users\\benjd\\Downloads\\chromedriver_win32\\chromedriver.exe",
