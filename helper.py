@@ -293,7 +293,7 @@ if operation == Operation.IMPORT or operation == Operation.ALL:
 
 elif operation == Operation.COMMIT or operation == Operation.ALL:
     logger.info('generating diary text')
-    diary_text = generate_diary()
+    diary_text = generate_diary(get_config_field('classesDirectory'))
     driver_textarea.clear()
     logger.info('writing diary to Piazza')
     for line in diary_text.splitlines():
@@ -302,6 +302,5 @@ elif operation == Operation.COMMIT or operation == Operation.ALL:
         driver_textarea.send_keys(Keys.ENTER)
     driver.find_element(By.XPATH, "//a[@data-pats='submit_button']").click()
     print('diary written - visit ' + get_config_field('diaryLink') + ' to ensure it was written correctly')
-
     logger.info("complete")
     driver_close()

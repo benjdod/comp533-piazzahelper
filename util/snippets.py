@@ -1,5 +1,11 @@
 import re
 
+def chain(data, *funcs):
+    out = data
+    for f in funcs:
+        out = f(out)
+    return out
+
 def make_day_filename(class_date):
     return '{month}-{day}.txt'.format(month=class_date.month, day=class_date.day)
 

@@ -2,7 +2,7 @@ import os
 import re
 import datetime
 from util.config import get_config_field
-from util.snippets import remove_qa_stubs, make_day_filename
+from util.snippets import remove_qa_stubs, make_day_filename, chain
 
 HONOR_PLEDGE = 'I pledge that I attended classes on the days reported below, the answers attributed to me in my Q&A were ones I articulated in class.'
 NEWLINE = '\n'
@@ -21,7 +21,53 @@ def write_days(days):
     for day in days:
         write_day(day[0], day[1])
 
-def generate_diary():
+"""
+def double_up(list, acc=[]):
+if len(list) > 0:
+    if len(acc) == 0 or len(acc[-1]) == 2:
+        acc.append(tuple([list[0]]))
+    else:
+        acc[-1] = tuple([acc[-1][0], list[0]])
+    return double_up(list[1:], acc)
+else:
+    return acc
+"""
+
+
+
+def strip_lines(lines):
+    return list(filter(lambda line: len(line) > 0, map(lambda line: line.strip(), lines)))
+
+def double_up(l):
+    return [e for e in zip(l[::2], l[1::2])]
+
+def drop_no_answer(l):
+    return list(filter(lambda qa: qa[1] != '-', l))
+
+def generate_diary_tuples(classes_dir):
+    class_files = os.listdir(classes_dir)
+    class_files.sort(key=lambda s: list(map(int, re.sub(r'\.txt$', '', s).split('-'))))
+
+    out = []
+
+    for item in class_files:
+        fullpath = os.path.join(os.path.abspath(classes_dir), item)
+        if not os.path.isfile(fullpath):
+            continue
+        datestr = re.sub(r'\.txt$', '', item)
+        datestr = re.sub(r'-', '/', datestr)
+
+        data_obj = {}
+        data_obj['date'] = datestr
+
+        with open(fullpath) as classfile:
+            data_obj['qa'] = chain(classfile, strip_lines, double_up, drop_no_answer)
+
+        out.append(data_obj)
+
+    return out
+
+def generate_diary(classes_dir):
     
     out = ''
 
@@ -29,32 +75,12 @@ def generate_diary():
     out += '{onyen}, {name}, Diary'.format(onyen=get_config_field('onyen'), name=get_config_field('name'))
     out += NEWLINE
 
-    class_files = os.listdir(get_config_field('classesDirectory'))
-    class_files.sort(key=lambda s: list(map(int, re.sub(r'\.txt$', '', s).split('-'))))
+    qa_data = generate_diary_tuples(classes_dir)
 
-    for item in class_files:
-        fullpath = os.path.join(os.path.abspath(get_config_field('classesDirectory')), item)
-        if not os.path.isfile(fullpath):
-            continue
-        datestr = re.sub(r'\.txt$', '', item)
-        datestr = re.sub(r'-', '/', datestr)
-        out += datestr + ':' + NEWLINE
+    for class_data in qa_data:
+        out += class_data['date'] + ':' + NEWLINE
         out += 'My Q&A:' + NEWLINE
-
-        with open(fullpath) as classfile:
-            side = 'q'
-            for line in classfile:
-                line = line.strip()
-
-                if line == '':
-                    continue 
-                if side == 'q':
-                    out += 'Instructor: ' + line
-                    side = 'a'
-                else:
-                    out += 'My Answer: ' + line
-                    side = 'q'
-                out += NEWLINE
-
+        for qa in class_data['qa']:
+            out += 'Instructor: ' + qa[0] + NEWLINE + 'My Answer: ' + qa[1] + NEWLINE
+    
     return out
-
