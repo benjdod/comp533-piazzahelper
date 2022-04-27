@@ -44,8 +44,12 @@ def double_up(l):
 def drop_no_answer(l):
     return list(filter(lambda qa: qa[1] != '-', l))
 
+def drop_no_question(l):
+    return list(filter(lambda qa: qa[0] != '-', l))
+
 def generate_diary_tuples(classes_dir):
     class_files = os.listdir(classes_dir)
+    class_files = list(filter(lambda f: re.match(r'\d+-\d+\.txt$', f), class_files))
     class_files.sort(key=lambda s: list(map(int, re.sub(r'\.txt$', '', s).split('-'))))
 
     out = []
@@ -61,7 +65,7 @@ def generate_diary_tuples(classes_dir):
         data_obj['date'] = datestr
 
         with open(fullpath) as classfile:
-            data_obj['qa'] = chain(classfile, strip_lines, double_up, drop_no_answer)
+            data_obj['qa'] = chain(classfile, strip_lines, double_up, drop_no_answer, drop_no_question)
 
         out.append(data_obj)
 

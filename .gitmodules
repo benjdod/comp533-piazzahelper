@@ -1,0 +1,3 @@
+[submodule "comp533-classfiles"]
+	path = comp533-classfiles
+	url = git@github.com:benjdod/comp533-classfiles.git

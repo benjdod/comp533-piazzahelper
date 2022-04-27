@@ -3,7 +3,7 @@
     "backupDirectory": "./backup",
     "logFile": "./helper.log",
     "maxBackups": 50,
-    "classesDirectory": "./classes",
+    "classesDirectory": "./comp533-classfiles",
     "driverPath": "C:\\Users\\benjd\\Downloads\\chromedriver_win32\\chromedriver.exe",
     "name": "Benjamin Dod",
     "onyen": "benjdod",
